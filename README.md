@@ -56,7 +56,7 @@ For a full list of dependencies, see requirements.txt. Key dependencies include:
 
 ## License
 
--- Will update after selection
+- MIT License
 
 ## Contributing
 
