@@ -31,6 +31,7 @@ python main.py
 ```
 
 ## Functionality
+  ![image](https://github.com/J-Speights/pySMASH/assets/60365409/63c96aec-2f13-4ab3-8882-b3671d030a02)
 
 - Capture Clicks: Record click coordinates on your screen.
 - Start Clicking: Start the automated clicking process based on captured coordinates and configurations.
