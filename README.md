@@ -61,7 +61,7 @@ For a full list of dependencies, see requirements.txt. Key dependencies include:
 
 ## Contributing
 
-Contributions to pySMASH are welcome. Please ensure to update tests as appropriate.
+Contributions to pySMASH are welcome. Please fork the repository and make pull requests. 
 
 ## Acknowledgments
 
@@ -70,4 +70,4 @@ Thanks to the Python and Tkinter communities for the invaluable resources.
 
 ## Contact
 
-For any questions or contributions, please contact Dewmrik at dewmrik@ibkc.gg.
+For any questions or contributions, please contact John at dewmrik@ibkc.gg.
