@@ -22,6 +22,12 @@ current_list_of_coords = []
 
 
 def on_click(x, y, button, pressed):
+    """
+    Handles saving clicks to the list_of_coords during capture_clicks.
+    Each left click appends to current_list_of_coords,
+    A right click will append that current_list_of_coords
+        to list_of_list_of_coords and exit after cleanup.
+    """
     global list_of_list_of_coords, current_list_of_coords
     if button == mouse.Button.left and pressed:
         current_list_of_coords.append((x, y))
@@ -34,22 +40,29 @@ def on_click(x, y, button, pressed):
 
 
 def capture_clicks():
+    """Creates a mouseclick listener."""
     with mouse.Listener(on_click=on_click) as listener:
         listener.join()
 
 
 def start_capturing():
+    "Creates a new thread for capturing click events."
     capture_thread = threading.Thread(target=capture_clicks)
     capture_thread.start()
 
 
 def update_coord_display():
+    """
+    Handles updating the coordinate display.
+    Throws the whole "display set" away and rebuilds it when called.
+    """
     coord_display.delete(0, tk.END)
     for i, coord_set in enumerate(list_of_list_of_coords):
         coord_display.insert(tk.END, f"Set {i+1}: {coord_set}\n")
 
 
 def delete_selected_set():
+    """Removes a given list from the list of list of coordinates."""
     selected_index = coord_display.curselection()
     if selected_index:
         list_of_list_of_coords.pop(selected_index[0])
@@ -57,6 +70,10 @@ def delete_selected_set():
 
 
 def click_coordinates(coordinates, sleep_time, stop_flag: StopFlag):
+    """
+    Given a list of (x,y) coord pair, clicks the locations on the screen.
+    Waits for the determined sleep_time betwen clicks.
+    """
     try:
         for x, y in coordinates:
             if stop_flag.stop_requested:
@@ -77,8 +94,13 @@ def handle_multi_list(
     use_random_order: bool,
     current_index: int = 0,
 ):
+    """
+    Manages the "click order" for a given list_of_coords.
+    If use_random_order, randomly picks a list_of_coords from the list of lists.
+    If not, runs through the entries sequentially.
+    """
     if use_random_order:
-        selected = selected = random.choice(list_of_list_of_coords)
+        selected = random.choice(list_of_list_of_coords)
     else:
         selected = list_of_list_of_coords[current_index]
     click_result = click_coordinates(selected, sleep_time, stop_flag)
@@ -87,8 +109,13 @@ def handle_multi_list(
 
 
 def start_clicking(stop_flag: StopFlag):
+    """
+    Main function for click sequence.
+    Reads in user options and iterates over the coord list(s).
+    """
     stop_flag.stop_requested = False
     status_label.config(text="Running click sequence...")
+    root.update()
     root.update_idletasks()
 
     if not list_of_list_of_coords:
@@ -106,6 +133,7 @@ def start_clicking(stop_flag: StopFlag):
             status_label.config(
                 text=f"Running click sequence {i + 1} of {iteration_count}."
             )
+            root.update()
             root.update_idletasks()
 
             if use_random_order:
@@ -138,6 +166,10 @@ def start_clicking(stop_flag: StopFlag):
 
 
 def save_configuration() -> None:
+    """
+    Save configuration in json format.
+    Prompts a dialogue to create a new file.
+    """
     filename = filedialog.asksaveasfilename(
         defaultextension=".json",
         filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
@@ -154,6 +186,10 @@ def save_configuration() -> None:
 
 
 def load_configuration(filename="config.json"):
+    """
+    Prompt dialogue to load user configuration.
+    Loads json file as dict.
+    """
     filename = filedialog.askopenfilename(
         filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
     )
@@ -178,6 +214,7 @@ def load_configuration(filename="config.json"):
 
 
 def show_help():
+    """Creates a top level help window. Shows help text (found in config.py)"""
     help_window = tk.Toplevel(root)
     help_window.title("pySMASH Help")
     help_window.geometry("400x300")

@@ -17,6 +17,7 @@ def on_press(
     if key == keyboard.Key.esc:
         stop_flag.stop_requested = True
         status_label.config(text="User pressed Esc, Stopping...")
+        root.update()
         root.update_idletasks()
         return False
 
