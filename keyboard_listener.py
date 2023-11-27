@@ -11,7 +11,7 @@ class StopFlag:
 def on_press(
     key: Union[keyboard.Key, keyboard.KeyCode],
     stop_flag: StopFlag,
-    status_label,
+    status_label: tk.Label,
     root: tk.Tk,
 ) -> Union[None, bool]:
     if key == keyboard.Key.esc:

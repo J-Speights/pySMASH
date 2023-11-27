@@ -87,9 +87,9 @@ def click_coordinates(coordinates, sleep_time, stop_flag: StopFlag):
 
 
 def handle_multi_list(
-    list_of_list_of_coords,
-    sleep_time,
-    sleep_between_lists_time,
+    list_of_list_of_coords: list[list[int]],
+    sleep_time: float,
+    sleep_between_lists_time: float,
     stop_flag: StopFlag,
     use_random_order: bool,
     current_index: int = 0,
@@ -108,7 +108,9 @@ def handle_multi_list(
     return click_result
 
 
-def start_clicking(stop_flag: StopFlag):
+def click_sequence_handler(
+    stop_flag: StopFlag,
+):
     """
     Main function for click sequence.
     Reads in user options and iterates over the coord list(s).
@@ -159,10 +161,16 @@ def start_clicking(stop_flag: StopFlag):
                         return
 
         status_label.config(text="Finished clicking.")
+        root.update()
+        root.update_idletasks()
     except ValueError:
-        print("Invalid entries.")
+        status_label.config(text="Invalid entries. Please check and try again.")
+        root.update()
+        root.update_idletasks()
     except SyntaxError:
-        print("Invalid coords.")
+        status_label.config(text="Invalid coords. Please check and try again.")
+        root.update()
+        root.update_idletasks()
 
 
 def save_configuration() -> None:
@@ -217,7 +225,7 @@ def show_help():
     """Creates a top level help window. Shows help text (found in config.py)"""
     help_window = tk.Toplevel(root)
     help_window.title("pySMASH Help")
-    help_window.geometry("400x300")
+    help_window.geometry("400x750")
 
     help_text = HELP_TEXT
     tk.Label(help_window, text=help_text, justify=tk.LEFT, wraplength=380).pack(
@@ -274,7 +282,7 @@ if __name__ == "__main__":
     start_button = tk.Button(
         root,
         text="Start Clicking",
-        command=lambda: start_clicking(stop_flag),
+        command=lambda: click_sequence_handler(stop_flag),
         width=20,
         height=2,
         bg="light green",
