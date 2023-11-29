@@ -55,10 +55,12 @@ def update_coord_display():
     """
     Handles updating the coordinate display.
     Throws the whole "display set" away and rebuilds it when called.
+    Also handles updating the start_button's state.
     """
     coord_display.delete(0, tk.END)
     for i, coord_set in enumerate(list_of_list_of_coords):
         coord_display.insert(tk.END, f"Set {i+1}: {coord_set}\n")
+    start_button["state"] = "normal" if list_of_list_of_coords else "disabled"
 
 
 def delete_selected_set():
@@ -215,6 +217,9 @@ def load_configuration(filename="config.json"):
                 iteration_count_entry.delete(0, tk.END)
                 iteration_count_entry.insert(0, config["iteration_count"])
                 update_coord_display()
+                start_button["state"] = (
+                    "normal" if list_of_list_of_coords else "disabled"
+                )
         except (FileNotFoundError, json.JSONDecodeError):
             status_label.config(
                 text="Config File not found or invalid. Loading default values."
@@ -279,12 +284,18 @@ if __name__ == "__main__":
     coord_display = tk.Listbox(root, height=10, width=50)
     coord_display.grid(row=6, columnspan=2)
 
+    if not list_of_list_of_coords:
+        start_button_state = "disabled"
+    else:
+        start_button_state = "normal"
+
     start_button = tk.Button(
         root,
         text="Start Clicking",
         command=lambda: click_sequence_handler(stop_flag),
         width=20,
         height=2,
+        state=start_button_state,
         bg="light green",
     )
     start_button.grid(row=7, columnspan=2, pady=(10, 0))
