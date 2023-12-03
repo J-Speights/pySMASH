@@ -23,9 +23,9 @@ def on_press(
 
 
 def start_keyboard_listener(
-    root: tk.Tk, stop_requested: StopFlag, status_label: tk.Label
+    root: tk.Tk, stop_flag: StopFlag, status_label: tk.Label
 ) -> None:
     listener = keyboard.Listener(
-        on_press=lambda key: on_press(key, stop_requested, status_label, root)
+        on_press=lambda key: on_press(key, stop_flag, status_label, root)
     )
     listener.start()
